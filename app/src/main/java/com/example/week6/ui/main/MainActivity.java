@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
                 intent.putExtra("position", position);
                 intent.putExtra("article", article);
+                intent.putExtra("slug", article.getSlug());
                 //editRegister.launch(intent);
                 startActivity(intent);
 

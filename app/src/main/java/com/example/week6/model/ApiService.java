@@ -9,6 +9,11 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
+    @GET("api/articles/{slug}")
+    Call<SingleArticle> getArticle(
+            @Path("slug") String slug
+    );
+
     @GET("api/articles")
     Call<MultipleArticle> getArticleList(
             @Header("Authorization") String token

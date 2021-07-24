@@ -46,6 +46,7 @@ public class ArticleActivity extends AppCompatActivity {
 
         Article article = (Article) getIntent().getSerializableExtra("article");
         int position = getIntent().getIntExtra("position", -1);
+        String slug = getIntent().getStringExtra("slug");
         if (article != null)
         {
             titleText.setText(article.getTitle());
@@ -68,16 +69,17 @@ public class ArticleActivity extends AppCompatActivity {
         }
 
 
-        NetworkHelper.getInstance().getService().getCommentList(article.getSlug()).enqueue(new Callback<MultipleComment>() {
-            @Override
-            public void onResponse(Call<MultipleComment> call, Response<MultipleComment> response) {
-                if (response.isSuccessful())
-                {
-                    //Toast.makeText(ArticleActivity.this, "HI~", Toast.LENGTH_SHORT).show();
-                    MultipleComment comments = response.body();
-                    if (comments.getComments().size() != 0)
+        if (slug != null) {
+            NetworkHelper.getInstance().getService().getCommentList(slug).enqueue(new Callback<MultipleComment>() {
+                @Override
+                public void onResponse(Call<MultipleComment> call, Response<MultipleComment> response) {
+                    if (response.isSuccessful())
                     {
-                        commentAdapter.setCommentList(comments.getComments());
+                        //Toast.makeText(ArticleActivity.this, "HI~", Toast.LENGTH_SHORT).show();
+                        MultipleComment comments = response.body();
+                        if (comments.getComments().size() != 0)
+                        {
+                            commentAdapter.setCommentList(comments.getComments());
                         /*
                         commentText.setText("");
                         for (Comment comment : comments.getComments()) {
@@ -85,16 +87,17 @@ public class ArticleActivity extends AppCompatActivity {
                             //articleText.setText(articleText.getText() + "\n" + article.getTitle());
                         }
                          */
+                        }
                     }
+                    //Toast.makeText(ArticleActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                 }
-                //Toast.makeText(ArticleActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onFailure(Call<MultipleComment> call, Throwable t) {
-                //Toast.makeText(ArticleActivity.this, "OOPS~", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<MultipleComment> call, Throwable t) {
+                    //Toast.makeText(ArticleActivity.this, "OOPS~", Toast.LENGTH_SHORT).show();
 
-            }
-        });
+                }
+            });
+        }
     }
 }

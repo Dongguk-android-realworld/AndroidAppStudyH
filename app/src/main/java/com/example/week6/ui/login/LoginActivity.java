@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.week6.util.NetworkHelper;
+import com.example.week6.R;
+import com.example.week6.model.User;
+import com.example.week6.model.UserBody;
+import com.example.week6.ui.main.MainActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;

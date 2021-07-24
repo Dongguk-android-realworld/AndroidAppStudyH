@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.model;
 
 import java.io.Serializable;
 

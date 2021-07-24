@@ -1,4 +1,6 @@
-package com.example.week6;
+package com.example.week6.model;
+
+import com.example.week6.model.Comment;
 
 import java.util.List;
 

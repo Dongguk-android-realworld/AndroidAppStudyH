@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.ui.article;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.week6.R;
+import com.example.week6.model.Comment;
 
 import java.util.ArrayList;
 import java.util.List;

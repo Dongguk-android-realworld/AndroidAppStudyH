@@ -1,6 +1,7 @@
-package com.example.week6;
+package com.example.week6.model;
 
-import java.io.Serializable;
+import com.example.week6.model.Article;
+
 import java.util.List;
 
 public class MultipleArticle {

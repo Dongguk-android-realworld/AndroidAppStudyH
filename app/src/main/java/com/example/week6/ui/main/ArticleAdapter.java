@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.ui.main;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.week6.R;
+import com.example.week6.model.Article;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,9 +120,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             image = itemView.findViewById(R.id.iv_image);
 
 
+            // 여기에 있지 않고 bind에 있으면 잘못
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (getLayoutPosition() == RecyclerView.NO_POSITION) return;
                     listener.onArticleClick(getLayoutPosition(), articleList.get(getLayoutPosition()));
                 }
             });

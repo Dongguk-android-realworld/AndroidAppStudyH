@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.model;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -8,6 +8,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiService {
+
+    @GET("api/articles/{slug}")
+    Call<SingleArticle> getArticle(
+            @Path("slug") String slug
+    );
 
     @GET("api/articles")
     Call<MultipleArticle> getArticleList(

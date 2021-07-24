@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,15 +10,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.week6.ApiService;
-import com.example.week6.Article;
-import com.example.week6.MultipleArticle;
+import com.example.week6.ui.article.ArticleActivity;
+import com.example.week6.model.MultipleArticle;
+import com.example.week6.util.NetworkHelper;
+import com.example.week6.R;
+import com.example.week6.model.Article;
+import com.example.week6.model.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 

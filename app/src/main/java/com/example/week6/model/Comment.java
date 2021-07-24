@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.model;
 
 public class Comment {
     private int id;

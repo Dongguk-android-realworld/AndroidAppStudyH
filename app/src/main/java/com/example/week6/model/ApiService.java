@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.model;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

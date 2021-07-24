@@ -1,4 +1,6 @@
-package com.example.week6;
+package com.example.week6.util;
+
+import com.example.week6.model.ApiService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

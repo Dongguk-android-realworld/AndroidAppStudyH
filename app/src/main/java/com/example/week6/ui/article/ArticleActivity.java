@@ -1,4 +1,4 @@
-package com.example.week6;
+package com.example.week6.ui.article;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.week6.model.MultipleComment;
+import com.example.week6.util.NetworkHelper;
+import com.example.week6.R;
+import com.example.week6.model.Article;
 
 import retrofit2.Call;
 import retrofit2.Callback;

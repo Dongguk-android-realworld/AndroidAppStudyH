@@ -8,10 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.week6.model.Comment;
 import com.example.week6.model.MultipleComment;
+import com.example.week6.model.SingleArticle;
 import com.example.week6.util.NetworkHelper;
 import com.example.week6.R;
 import com.example.week6.model.Article;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,46 +51,48 @@ public class ArticleActivity extends AppCompatActivity {
         Article article = (Article) getIntent().getSerializableExtra("article");
         int position = getIntent().getIntExtra("position", -1);
         String slug = getIntent().getStringExtra("slug");
-        if (article != null)
+        if (slug != null)
         {
-            titleText.setText(article.getTitle());
-            descriptionText.setText(article.getDescription());
-            bodyText.setText(article.getBody());
-            createdAtText.setText(article.getCreatedAt().substring(0, 10) + " " + article.getCreatedAt().substring(11, 19));
-            usernameText.setText(article.getAuthor().getUsername());
-            favoritesCountText.setText(""+article.getFavoritesCount());
-            String tagString = "";
+            NetworkHelper.getInstance().getService().getArticle(slug).enqueue(new Callback<SingleArticle>() {
+                @Override
+                public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
+                    if (response.isSuccessful()) {
+                        titleText.setText(article.getTitle());
+                        descriptionText.setText(article.getDescription());
+                        bodyText.setText(article.getBody());
+                        createdAtText.setText(article.getCreatedAt().substring(0, 10) + " " + article.getCreatedAt().substring(11, 19));
+                        usernameText.setText(article.getAuthor().getUsername());
+                        favoritesCountText.setText(""+article.getFavoritesCount());
+                        String tagString = "";
 
-            for (int i=0;i<article.getTagList().size();i++)
-            {
-                tagString = tagString + "#" + article.getTagList().get(i);
-            }
+                        for (int i=0;i<article.getTagList().size();i++)
+                        {
+                            tagString = tagString + "#" + article.getTagList().get(i);
+                        }
 
-            tagText.setText(tagString);
-            Glide.with(image)
-                    .load(article.getAuthor().getImage())
-                    .into(image);
-        }
+                        tagText.setText(tagString);
+                        Glide.with(image)
+                                .load(article.getAuthor().getImage())
+                                .into(image);
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<SingleArticle> call, Throwable t) {
 
-        if (slug != null) {
+                }
+            });
+
             NetworkHelper.getInstance().getService().getCommentList(slug).enqueue(new Callback<MultipleComment>() {
                 @Override
                 public void onResponse(Call<MultipleComment> call, Response<MultipleComment> response) {
                     if (response.isSuccessful())
                     {
                         //Toast.makeText(ArticleActivity.this, "HI~", Toast.LENGTH_SHORT).show();
-                        MultipleComment comments = response.body();
-                        if (comments.getComments().size() != 0)
+                        List<Comment> comments = response.body().getComments();
+                        if (comments.size() != 0)
                         {
-                            commentAdapter.setCommentList(comments.getComments());
-                        /*
-                        commentText.setText("");
-                        for (Comment comment : comments.getComments()) {
-                            commentText.setText(commentText.getText() + "\n" + comment.getBody());
-                            //articleText.setText(articleText.getText() + "\n" + article.getTitle());
-                        }
-                         */
+                            commentAdapter.setCommentList(comments);
                         }
                     }
                     //Toast.makeText(ArticleActivity.this, response.toString(), Toast.LENGTH_SHORT).show();

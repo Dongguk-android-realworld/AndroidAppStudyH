@@ -52,8 +52,8 @@
 
         <ImageView
             android:id="@+id/iv_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="12dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -78,6 +78,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_username"
             app:layout_constraintStart_toEndOf="@+id/iv_image"
             android:text="약력"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/tv_blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bio"
+            app:layout_constraintStart_toEndOf="@+id/iv_image"
+            android:text=""
             android:textSize="10sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

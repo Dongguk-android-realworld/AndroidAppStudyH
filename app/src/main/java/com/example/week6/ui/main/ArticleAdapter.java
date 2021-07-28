@@ -13,9 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.week6.R;
 import com.example.week6.model.Article;
+import com.example.week6.model.SingleArticle;
+import com.example.week6.util.NetworkHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
 
@@ -68,7 +74,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(articleList.get(position));
+        holder.bind(articleList.get(position), position);
         // bind 함수로 대체
         /*
         holder.titleText.setText(articleList.get(position).getTitle());
@@ -105,9 +111,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView titleText, descriptionText, bodyText, createdAtText, usernameText, favoritesCountText, tagText;
+        TextView titleText, descriptionText, bodyText, createdAtText, usernameText, tagText;
         Button favoritedButton;
-        ImageView image, ivThumb;
+        ImageView image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -131,7 +137,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             });
         }
 
-        void bind(Article article) {
+        void bind(Article article, int position) {
             titleText.setText(article.getTitle());
             descriptionText.setText(article.getDescription());
             createdAtText.setText(article.getCreatedAt().substring(0, 10) + " " + article.getCreatedAt().substring(11, 19));
@@ -150,6 +156,45 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             Glide.with(image)
                     .load(article.getAuthor().getImage())
                     .into(image);
+
+            String token = "Token " + NetworkHelper.getInstance().getToken();
+            String slug = article.getSlug();
+
+            favoritedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (article.isFavorited()) {
+                        NetworkHelper.getInstance().getService().unfavoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
+                            @Override
+                            public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
+                                article.setFavoritesCount(article.getFavoritesCount()-1);
+                                article.setFavorited(!(article.isFavorited()));
+                                notifyItemChanged(position);
+                            }
+
+                            @Override
+                            public void onFailure(Call<SingleArticle> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                    else {
+                        NetworkHelper.getInstance().getService().favoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
+                            @Override
+                            public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
+                                article.setFavoritesCount(article.getFavoritesCount()+1);
+                                article.setFavorited(!(article.isFavorited()));
+                                notifyItemChanged(position);
+                            }
+
+                            @Override
+                            public void onFailure(Call<SingleArticle> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 }

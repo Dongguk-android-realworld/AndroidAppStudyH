@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +53,9 @@ public class ArticleActivity extends AppCompatActivity {
 
         Article article = (Article) getIntent().getSerializableExtra("article");
         int position = getIntent().getIntExtra("position", -1);
+        String token = "Token " + NetworkHelper.getInstance().getToken();
         String slug = getIntent().getStringExtra("slug");
+
         if (slug != null)
         {
             NetworkHelper.getInstance().getService().getArticle(slug).enqueue(new Callback<SingleArticle>() {
@@ -83,6 +86,48 @@ public class ArticleActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<SingleArticle> call, Throwable t) {
 
+                }
+            });
+
+            favoritedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (article.isFavorited()) {
+                        NetworkHelper.getInstance().getService().unfavoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
+                            @Override
+                            public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
+                                article.setFavoritesCount(article.getFavoritesCount()-1);
+                                article.setFavorited(!(article.isFavorited()));
+
+                                favoritedButton.setText(""+article.getFavoritesCount());
+                                favoritedButton.setSelected(article.isFavorited());
+                                //notifyItemChanged(position);
+                            }
+
+                            @Override
+                            public void onFailure(Call<SingleArticle> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                    else {
+                        NetworkHelper.getInstance().getService().favoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
+                            @Override
+                            public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
+                                article.setFavoritesCount(article.getFavoritesCount()+1);
+                                article.setFavorited(!(article.isFavorited()));
+
+                                favoritedButton.setText(""+article.getFavoritesCount());
+                                favoritedButton.setSelected(article.isFavorited());
+                                //notifyItemChanged(position);
+                            }
+
+                            @Override
+                            public void onFailure(Call<SingleArticle> call, Throwable t) {
+
+                            }
+                        });
+                    }
                 }
             });
 

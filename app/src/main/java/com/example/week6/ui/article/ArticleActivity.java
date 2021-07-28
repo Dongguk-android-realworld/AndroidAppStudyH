@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class ArticleActivity extends AppCompatActivity {
 
     private CommentAdapter commentAdapter;
     private TextView titleText, descriptionText, bodyText, createdAtText, usernameText, favoritesCountText, tagText;
+    private Button favoritedButton;
     private ImageView image;
     private RecyclerView commentRecyclerView;
 
@@ -38,8 +40,8 @@ public class ArticleActivity extends AppCompatActivity {
         bodyText = findViewById(R.id.tv_body);
         createdAtText = findViewById(R.id.tv_createdAt);
         usernameText = findViewById(R.id.tv_username);
-        favoritesCountText = findViewById(R.id.tv_favoritesCount);
         tagText = findViewById(R.id.tv_tag);
+        favoritedButton = findViewById(R.id.btn_favorited);
         image = findViewById(R.id.iv_image);
 
         commentRecyclerView = findViewById(R.id.rv_comment);
@@ -62,7 +64,8 @@ public class ArticleActivity extends AppCompatActivity {
                         bodyText.setText(article.getBody());
                         createdAtText.setText(article.getCreatedAt().substring(0, 10) + " " + article.getCreatedAt().substring(11, 19));
                         usernameText.setText(article.getAuthor().getUsername());
-                        favoritesCountText.setText(""+article.getFavoritesCount());
+                        favoritedButton.setText(""+article.getFavoritesCount());
+                        favoritedButton.setSelected(article.isFavorited());
                         String tagString = "";
 
                         for (int i=0;i<article.getTagList().size();i++)

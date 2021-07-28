@@ -3,6 +3,7 @@ package com.example.week6.ui.main;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -105,6 +106,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView titleText, descriptionText, bodyText, createdAtText, usernameText, favoritesCountText, tagText;
+        Button favoritedButton;
         ImageView image, ivThumb;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,9 +116,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             bodyText = itemView.findViewById(R.id.tv_body);
             createdAtText = itemView.findViewById(R.id.tv_createdAt);
             usernameText = itemView.findViewById(R.id.tv_username);
-            favoritesCountText = itemView.findViewById(R.id.tv_favoritesCount);
             tagText = itemView.findViewById(R.id.tv_tag);
-            ivThumb = itemView.findViewById(R.id.iv_heart);
+            favoritedButton = itemView.findViewById(R.id.btn_favorited);
             image = itemView.findViewById(R.id.iv_image);
 
 
@@ -135,8 +136,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             descriptionText.setText(article.getDescription());
             createdAtText.setText(article.getCreatedAt().substring(0, 10) + " " + article.getCreatedAt().substring(11, 19));
             usernameText.setText(article.getAuthor().getUsername());
-            favoritesCountText.setText(""+article.getFavoritesCount());
-            ivThumb.setSelected(article.isFavorited());
+            favoritedButton.setText(""+article.getFavoritesCount());
+            favoritedButton.setSelected(article.isFavorited());
 
             String tagString = "";
 

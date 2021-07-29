@@ -20,9 +20,6 @@ public interface ApiService {
             @Header("Authorization") String token
     );
 
-    @GET("api/articles")
-    Call<MultipleArticle> getArticleList();
-
     @POST("api/articles/{slug}/favorite")
     Call<SingleArticle> favoriteArticle(
             @Header("Authorization") String token,
@@ -38,6 +35,13 @@ public interface ApiService {
     @GET("api/articles/{slug}/comments")
     Call<MultipleComment> getCommentList(
             @Path("slug") String slug
+    );
+
+    @POST("api/articles/{slug}/comments")
+    Call<SingleComment> addComment(
+            @Header("Authorization") String token,
+            @Path("slug") String slug,
+            @Body SingleComment requestComment
     );
 
     @POST("api/users/login")

@@ -5,6 +5,11 @@ public class Comment {
     private String createdAt, updatedAt, body;
     private Author author;
 
+    // 댓글 게시용
+    public Comment(String body) {
+        this.body = body;
+    }
+
     public Comment(int id, String createdAt, String updatedAt, String body, Author author) {
         this.id = id;
         this.createdAt = createdAt;

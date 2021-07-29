@@ -160,10 +160,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             String token = "Token " + NetworkHelper.getInstance().getToken();
             String slug = article.getSlug();
 
+            // 좋아요 버튼 클릭 리스너
             favoritedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // 현재 좋아요 상태에 따라 좋아요 설정/해제 구분
                     if (article.isFavorited()) {
+                        // 좋아요 해제
                         NetworkHelper.getInstance().getService().unfavoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
                             @Override
                             public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
@@ -179,6 +182,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                         });
                     }
                     else {
+                        // 좋아요 설정
                         NetworkHelper.getInstance().getService().favoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
                             @Override
                             public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {

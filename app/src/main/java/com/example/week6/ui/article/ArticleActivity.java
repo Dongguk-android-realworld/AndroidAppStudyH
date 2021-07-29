@@ -6,13 +6,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.week6.model.Comment;
 import com.example.week6.model.MultipleComment;
 import com.example.week6.model.SingleArticle;
+import com.example.week6.model.SingleComment;
+import com.example.week6.ui.login.LoginActivity;
 import com.example.week6.util.NetworkHelper;
 import com.example.week6.R;
 import com.example.week6.model.Article;
@@ -26,8 +30,9 @@ import retrofit2.Response;
 public class ArticleActivity extends AppCompatActivity {
 
     private CommentAdapter commentAdapter;
-    private TextView titleText, descriptionText, bodyText, createdAtText, usernameText, favoritesCountText, tagText;
-    private Button favoritedButton;
+    private TextView titleText, descriptionText, bodyText, createdAtText, usernameText, tagText;
+    private EditText commentEditText;
+    private Button favoritedButton, commentAddButton;
     private ImageView image;
     private RecyclerView commentRecyclerView;
 
@@ -42,7 +47,9 @@ public class ArticleActivity extends AppCompatActivity {
         createdAtText = findViewById(R.id.tv_createdAt);
         usernameText = findViewById(R.id.tv_username);
         tagText = findViewById(R.id.tv_tag);
+        commentEditText = findViewById(R.id.et_comment);
         favoritedButton = findViewById(R.id.btn_favorited);
+        commentAddButton = findViewById(R.id.btn_comment);
         image = findViewById(R.id.iv_image);
 
         commentRecyclerView = findViewById(R.id.rv_comment);
@@ -89,10 +96,13 @@ public class ArticleActivity extends AppCompatActivity {
                 }
             });
 
+            // 좋아요 버튼 클릭 리스너
             favoritedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // 현재 좋아요 상태에 따라 좋아요 설정/해제 구분
                     if (article.isFavorited()) {
+                        // 좋아요 해제
                         NetworkHelper.getInstance().getService().unfavoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
                             @Override
                             public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
@@ -101,7 +111,6 @@ public class ArticleActivity extends AppCompatActivity {
 
                                 favoritedButton.setText(""+article.getFavoritesCount());
                                 favoritedButton.setSelected(article.isFavorited());
-                                //notifyItemChanged(position);
                             }
 
                             @Override
@@ -111,6 +120,7 @@ public class ArticleActivity extends AppCompatActivity {
                         });
                     }
                     else {
+                        // 좋아요 설정
                         NetworkHelper.getInstance().getService().favoriteArticle(token, slug).enqueue(new Callback<SingleArticle>() {
                             @Override
                             public void onResponse(Call<SingleArticle> call, Response<SingleArticle> response) {
@@ -119,11 +129,38 @@ public class ArticleActivity extends AppCompatActivity {
 
                                 favoritedButton.setText(""+article.getFavoritesCount());
                                 favoritedButton.setSelected(article.isFavorited());
-                                //notifyItemChanged(position);
                             }
 
                             @Override
                             public void onFailure(Call<SingleArticle> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }
+            });
+
+            // 댓글 게시 버튼 클릭 리스너
+            commentAddButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String commentBody = commentEditText.getText().toString();
+
+                    if (commentBody.isEmpty()) {
+                        Toast.makeText(ArticleActivity.this, "내용이 없습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Comment comment = new Comment(commentBody);
+                        SingleComment body = new SingleComment(comment);
+                        NetworkHelper.getInstance().getService().addComment(token, slug, body).enqueue(new Callback<SingleComment>() {
+                            @Override
+                            public void onResponse(Call<SingleComment> call, Response<SingleComment> response) {
+                                Comment responseComment = response.body().getComment();
+                                commentAdapter.addComment(responseComment);
+                            }
+
+                            @Override
+                            public void onFailure(Call<SingleComment> call, Throwable t) {
 
                             }
                         });
@@ -136,19 +173,16 @@ public class ArticleActivity extends AppCompatActivity {
                 public void onResponse(Call<MultipleComment> call, Response<MultipleComment> response) {
                     if (response.isSuccessful())
                     {
-                        //Toast.makeText(ArticleActivity.this, "HI~", Toast.LENGTH_SHORT).show();
                         List<Comment> comments = response.body().getComments();
                         if (comments.size() != 0)
                         {
                             commentAdapter.setCommentList(comments);
                         }
                     }
-                    //Toast.makeText(ArticleActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(Call<MultipleComment> call, Throwable t) {
-                    //Toast.makeText(ArticleActivity.this, "OOPS~", Toast.LENGTH_SHORT).show();
 
                 }
             });

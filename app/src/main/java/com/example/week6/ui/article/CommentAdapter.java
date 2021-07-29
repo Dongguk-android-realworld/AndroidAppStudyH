@@ -33,14 +33,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     // 하나 추가
     public void addComment(Comment comment)
     {
-        commentList.add(comment);
+        commentList.add(0, comment);
         notifyDataSetChanged();
     }
 
     // 여러개 추가
     public void addComment(List<Comment> comments)
     {
-        commentList.addAll(comments);
+        commentList.addAll(0, comments);
         notifyDataSetChanged();
     }
 
